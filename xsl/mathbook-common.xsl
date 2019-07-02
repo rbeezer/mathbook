@@ -37,7 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
@@ -6376,7 +6376,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
     <!-- local names of objects? -->
     <!-- below useful for debugging, worth keeping for a while, 2017-07 -->
-    <!-- 
+    <!--
     <xsl:message>N:<xsl:value-of select="$layout/number-panels" />:N</xsl:message>
     <xsl:message>
         <xsl:text>VA:</xsl:text>
@@ -10448,16 +10448,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template name="converter-blurb">
     <xsl:param name="lead-in" />
     <xsl:param name="lead-out" />
-    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*    Generated from PreTeXt source   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*    Generated from PreTeXt source               *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:variable name="pretexthash"><xsl:value-of select="normalize-space(document('../pretext.hash')/pretexthash)"/></xsl:variable>
+    <xsl:if test="$pretexthash!=''">
+    <xsl:copy-of select="$lead-in" /><xsl:text>*    using xsl commit                            *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*    </xsl:text><xsl:value-of select="$pretexthash"/>
+                                                                                  <xsl:text>    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$b-debug-datedfiles">
     <xsl:copy-of select="$lead-in" /><xsl:text>*    on </xsl:text>  <xsl:value-of select="date:date-time()" />
-                                                                      <xsl:text>    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+                                                                      <xsl:text>                *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*      https://pretextbook.org       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                                *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*            https://pretextbook.org             *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*                                                *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>**************************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We issue specialized blurbs with appropriate comment lines -->

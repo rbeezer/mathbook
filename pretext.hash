@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ASCII" ?>
+
+<pretexthash xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href=".git/refs/heads/dev" parse="text" />
+</pretexthash>
