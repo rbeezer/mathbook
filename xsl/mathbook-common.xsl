@@ -7207,7 +7207,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
             <xsl:with-param name="content">
 
-                <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
+                <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|paragraphs/*[&PROJECT-FILTER;]|self::worksheet//exercise">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                             <xsl:apply-templates select="." mode="solutions">
