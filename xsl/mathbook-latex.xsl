@@ -2057,11 +2057,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$latex.print='no'">
         <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
-        <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
+        <xsl:text>\hypersetup{hidelinks=false,colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex.print='yes'">
-        <xsl:text>%% latex.print parameter set to 'yes', all hyperlinks black and inactive&#xa;</xsl:text>
-        <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
+        <xsl:text>%% latex.print parameter set to 'yes', all hyperlinks "hidden", set to textcolor (but still active to preserve spacing)&#xa;</xsl:text>
+        <xsl:text>\hypersetup{hidelinks=true,colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
     <xsl:apply-templates select="." mode="title-short" />
