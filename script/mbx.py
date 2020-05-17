@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # ********************************************************************
 # Copyright 2010-2016 Robert A. Beezer
 #
@@ -19,6 +19,12 @@
 # *********************************************************************
 
 # 2016-05-05: this script should run under Python 2.7 and Python 3
+
+# messy hack to support both `python -m script.mbx` and `./mbx.py`:
+try:
+    from .version import __version__
+except ImportError:
+    from version import __version__
 
 ##############################################
 #
@@ -1320,6 +1326,7 @@ def get_cli_arguments():
     """Return the CLI arguments in parser object"""
     import argparse
     parser = argparse.ArgumentParser(description='MathBook XML utility script', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
 
     verbose_help = '\n'.join(["verbosity of information on progress of the program",
                               "  -v  is actions being performed",
@@ -1464,108 +1471,114 @@ def break_windows_path(python_style_dir):
 #
 ######
 
-# Parse command line
-# Deduce some paths
-# Read configuration file
-# Switch on command line
-
 import os.path, sys
 
-# grab command line arguments
-args = get_cli_arguments()
-_debug("CLI args {}".format(vars(args)))
+def main():
+    # Parse command line
+    # Deduce some paths
+    # Read configuration file
+    # Switch on command line
 
-# Report Python version in debugging output
-msg = "Python version: {}.{} (expecting 2.7 or newer)"
-_debug(msg.format(sys.version_info[0], sys.version_info[1]))
 
-# directory locations relative to MathBook XML installation
-mbx_dir = get_mbx_path()
-mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
-mbx_script_dir = os.path.join(mbx_dir, "script")
-mbx_user_dir = os.path.join(mbx_dir, "user")
-_debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
+    # grab command line arguments
+    args = get_cli_arguments()
+    _debug("CLI args {}".format(vars(args)))
 
-# directory location for outputs
-output_dir = os.path.abspath(args.dir)
-_debug("output dir: {}".format(output_dir))
+    # Report Python version in debugging output
+    msg = "Python version: {}.{} (expecting 2.7 or newer)"
+    _debug(msg.format(sys.version_info[0], sys.version_info[1]))
 
-config = get_config_info(mbx_script_dir, mbx_user_dir)
-plat = get_platform()
+    # directory locations relative to MathBook XML installation
+    mbx_dir = get_mbx_path()
+    mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
+    mbx_script_dir = os.path.join(mbx_dir, "script")
+    mbx_user_dir = os.path.join(mbx_dir, "user")
+    _debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
 
-if args.component == 'tikz':
-    if args.format == 'pdf':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
-    elif args.format == 'svg':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
-    elif args.format == 'source':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'source')
-    else:
-        raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
-elif args.component == 'asy':
-    if args.format == 'html':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'html')
-    elif args.format == 'pdf':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
-    elif args.format == 'svg':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
-    elif args.format == 'eps':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'eps')
-    elif args.format == 'source':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'source')
-    else:
-        raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-elif args.component == 'sageplot':
-    if args.format == 'pdf':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
-    elif args.format == 'svg':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
-    elif args.format == 'source':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'source')
-    else:
-        raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
-elif args.component == 'latex-image':
-    if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'pdf')
-    elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'svg')
-    elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'source')
-    elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'png')
-    elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'eps')
-    elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'all')
-    else:
-        raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
-elif args.component == 'webwork-tex':
-    wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
-             'and behaves very differently')
-    raise NotImplementedError(wtdep)
-elif args.component == 'webwork':
-    xslt_executable = get_executable(config,  'xslt')
-    _debug("xslt executable command: {}".format(xslt_executable))
-    webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
-elif args.component == 'youtube':
-    youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
-elif args.component == 'preview':
-    preview_images(args.xml_file, args.xmlid, output_dir)
-elif args.component == 'mom':
-    mom_static_problems(args.xml_file, args.xmlid, output_dir)
-elif args.component == 'all':
-    if args.format == 'sagenb':
-        # initialize  the converter
+    # directory location for outputs
+    output_dir = os.path.abspath(args.dir)
+    _debug("output dir: {}".format(output_dir))
+
+    config = get_config_info(mbx_script_dir, mbx_user_dir)
+    plat = get_platform()
+
+    if args.component == 'tikz':
+        if args.format == 'pdf':
+            tikz_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
+        elif args.format == 'svg':
+            tikz_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+        elif args.format == 'source':
+            tikz_conversion(args.xml_file, args.xmlid, output_dir, 'source')
+        else:
+            raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
+    elif args.component == 'asy':
+        if args.format == 'html':
+            asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'html')
+        elif args.format == 'pdf':
+            asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
+        elif args.format == 'svg':
+            asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+        elif args.format == 'eps':
+            asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'eps')
+        elif args.format == 'source':
+            asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'source')
+        else:
+            raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
+    elif args.component == 'sageplot':
+        if args.format == 'pdf':
+            sage_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
+        elif args.format == 'svg':
+            sage_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+        elif args.format == 'source':
+            sage_conversion(args.xml_file, args.xmlid, output_dir, 'source')
+        else:
+            raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
+    elif args.component == 'latex-image':
+        if args.format == 'pdf':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'pdf')
+        elif args.format == 'svg':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'svg')
+        elif args.format == 'source':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'source')
+        elif args.format == 'png':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'png')
+        elif args.format == 'eps':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'eps')
+        elif args.format == 'all':
+            latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'all')
+        else:
+            raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
+    elif args.component == 'webwork-tex':
+        wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
+                 'and behaves very differently')
+        raise NotImplementedError(wtdep)
+    elif args.component == 'webwork':
         xslt_executable = get_executable(config,  'xslt')
         _debug("xslt executable command: {}".format(xslt_executable))
-        m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
-        # Do the conversion
-        m2s.convert()
-    elif args.format == 'html':
-        raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
-    elif args.format == 'latex':
-        raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+        webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
+    elif args.component == 'youtube':
+        youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
+    elif args.component == 'preview':
+        preview_images(args.xml_file, args.xmlid, output_dir)
+    elif args.component == 'mom':
+        mom_static_problems(args.xml_file, args.xmlid, output_dir)
+    elif args.component == 'all':
+        if args.format == 'sagenb':
+            # initialize  the converter
+            xslt_executable = get_executable(config,  'xslt')
+            _debug("xslt executable command: {}".format(xslt_executable))
+            m2s = MathBookXMLtoSWS(xslt_exec=xslt_executable, mbx_dir=mbx_dir, xml_file=args.xml_file, sws_file=args.out)
+            # Do the conversion
+            m2s.convert()
+        elif args.format == 'html':
+            raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
+        elif args.format == 'latex':
+            raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+        else:
+            raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
     else:
-        raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
-else:
-    raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+        raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+
+
+if __name__ == "__main__":
+    main()
