@@ -20,6 +20,8 @@
 
 # 2016-05-05: this script should run under Python 2.7 and Python 3
 
+from version import __version__
+
 ##############################################
 #
 #  Graphics Language Extraction and Processing
@@ -1320,6 +1322,7 @@ def get_cli_arguments():
     """Return the CLI arguments in parser object"""
     import argparse
     parser = argparse.ArgumentParser(description='MathBook XML utility script', formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
 
     verbose_help = '\n'.join(["verbosity of information on progress of the program",
                               "  -v  is actions being performed",
