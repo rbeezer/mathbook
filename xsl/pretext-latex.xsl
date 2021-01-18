@@ -1438,9 +1438,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- solutions to PROJECT-LIKE -->
         <xsl:for-each select="$project-reps">
-            <xsl:variable name="elt-name">
-                <xsl:value-of select="local-name(.)"/>
-            </xsl:variable>
+            <xsl:variable name="elt-name" select="local-name(.)"/>
             <xsl:variable name="type-name">
                 <xsl:apply-templates select="." mode="type-name"/>
             </xsl:variable>
@@ -2444,9 +2442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- was really bad page breaks, or worse, the potential for the interior -->
 <!-- box dribbling off the bottom of the page.                            -->
 <xsl:template match="introduction|conclusion" mode="environment">
-    <xsl:variable name="environment-name">
-        <xsl:value-of select="local-name(.)"/>
-    </xsl:variable>
+    <xsl:variable name="environment-name" select="local-name(.)"/>
     <xsl:text>%% </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>: in a structured division&#xa;</xsl:text>
@@ -2700,9 +2696,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Identical to ASIDE-LIKE, but we keep it distinct -->
 <xsl:template match="assemblage" mode="environment">
     <!-- Names of various pieces use the element name -->
-    <xsl:variable name="environment-name">
-        <xsl:value-of select="local-name(.)"/>
-    </xsl:variable>
+    <xsl:variable name="environment-name" select="local-name(.)"/>
     <xsl:text>%% </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>: fairly simple un-numbered block/structure&#xa;</xsl:text>
@@ -2755,9 +2749,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: do not integrate into others, as treatment may necessarily vary -->
 <xsl:template match="&ASIDE-LIKE;" mode="environment">
     <!-- Names of various pieces use the element name -->
-    <xsl:variable name="environment-name">
-        <xsl:value-of select="local-name(.)"/>
-    </xsl:variable>
+    <xsl:variable name="environment-name" select="local-name(.)"/>
     <xsl:text>%% </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>: fairly simple un-numbered block/structure&#xa;</xsl:text>
@@ -8114,9 +8106,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="icon">
     <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="icon-name" select="string(@name)"/>
 
     <xsl:variable name="fa-name">
         <xsl:choose>
@@ -8147,9 +8137,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="substring($text, 2)"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="first-part">
-                <xsl:value-of select="substring-before($text, '-')"/>
-            </xsl:variable>
+            <xsl:variable name="first-part" select="substring-before($text, '-')"/>
             <xsl:value-of select="translate(substring($first-part, 1, 1), &LOWERCASE;, &UPPERCASE;)"/>
             <xsl:value-of select="substring($first-part, 2)"/>
             <xsl:call-template name="camel-case-font-name">
@@ -8174,9 +8162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="kbd[@name]">
     <!-- the name attribute of the "kbd" in text as a string -->
-    <xsl:variable name="kbdkey-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="kbdkey-name" select="string(@name)"/>
 
     <xsl:text>\kbd{</xsl:text>
         <!-- for-each is just one node, but sets context for key() -->

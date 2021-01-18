@@ -937,9 +937,7 @@ width: 100%
 <!-- Font Awesome CSS loading, $icon-table is in -common -->
 <xsl:template match="icon">
     <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="icon-name" select="string(@name)"/>
 
     <!-- for-each is just one node, but sets context for key() -->
     <xsl:for-each select="$icon-table">

@@ -459,9 +459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Font Awesome CSS loading, $icon-table is in -common -->
 <xsl:template match="icon">
     <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="icon-name" select="string(@name)"/>
 
     <!-- for-each is just one node, but sets context for key() -->
     <xsl:for-each select="$icon-table">
@@ -643,9 +641,7 @@ TODO: (overall)
 <!-- few gotchas need adjustment.  So we override.             -->
 <xsl:template match="c">
     <!-- grab content literally -->
-    <xsl:variable name="text">
-        <xsl:value-of select="."/>
-    </xsl:variable>
+    <xsl:variable name="text" select="string(.)"/>
 
     <!-- We wrap verbatim inline text with an HTML "code" element. -->
     <!-- When there are to in close proximity (same paragraph)     -->
@@ -701,9 +697,7 @@ TODO: (overall)
 <!-- are fortunate to be able to encode the dollar sign.  -->
 <xsl:template match="@href" mode="serialize">
     <!-- sanitize value first -->
-    <xsl:variable name="text">
-        <xsl:value-of select="."/>
-    </xsl:variable>
+    <xsl:variable name="text" select="string(.)"/>
     <xsl:variable name="underscore-fixed" select="str:replace($text,             '_',  '%5F')"/>
     <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed, '*',  '%2A')"/>
     <xsl:variable name="dollar-fixed"     select="str:replace($asterisk-fixed,   '$',  '%24')"/>

@@ -1418,12 +1418,8 @@
             <xsl:value-of select="substring-before($trimmed-start, '}')"/>
         </xsl:if>
     </xsl:variable>
-    <xsl:variable name="macro-command">
-        <xsl:value-of select="substring-before($macros, '&#xa;')"/>
-    </xsl:variable>
-    <xsl:variable name="next-lines">
-        <xsl:value-of select="substring-after($macros, '&#xa;')"/>
-    </xsl:variable>
+    <xsl:variable name="macro-command" select="substring-before($macros, '&#xa;')"/>
+    <xsl:variable name="next-lines" select="substring-after($macros, '&#xa;')"/>
     <xsl:if test="contains(., $macro-name)">
         <xsl:value-of select="normalize-space($macro-command)"/>
     </xsl:if>
@@ -1810,9 +1806,7 @@
     </xsl:if>
     <!-- prefix is optional -->
     <xsl:if test="@prefix">
-        <xsl:variable name="prefix">
-            <xsl:value-of select="@prefix" />
-        </xsl:variable>
+        <xsl:variable name="prefix" select="string(@prefix)"/>
         <xsl:variable name="short">
             <xsl:for-each select="document('pretext-units.xsl')">
                 <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
@@ -1823,9 +1817,7 @@
     <!-- base unit is *mandatory* so check to see if it has been provided -->
     <xsl:choose>
         <xsl:when test="@base">
-            <xsl:variable name="base">
-                <xsl:value-of select="@base" />
-            </xsl:variable>
+            <xsl:variable name="base" select="string(@base)"/>
             <xsl:variable name="short">
                 <xsl:for-each select="document('pretext-units.xsl')">
                     <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>

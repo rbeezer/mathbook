@@ -634,12 +634,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:value-of select="count(*)"/>
   <xsl:text>, raster equal height=rows, raster force size=false, raster column skip=0ex] &#xa;</xsl:text>
 
-  <xsl:variable name="columnCount">
-    <xsl:value-of select="count(*)"/>
-  </xsl:variable>
-  <xsl:variable name="widthFraction">
-    <xsl:value-of select="1 div $columnCount" />
-  </xsl:variable>
+  <xsl:variable name="columnCount" select="count(*)"/>
+  <xsl:variable name="widthFraction" select="1 div $columnCount"/>
 
   <xsl:for-each select="*">
     <xsl:if test="parent::*/@pause = 'yes'">

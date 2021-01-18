@@ -7419,9 +7419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="mag">
-    <xsl:variable name="mag">
-        <xsl:value-of select="."/>
-    </xsl:variable>
+    <xsl:variable name="mag" select="string(.)"/>
     <xsl:variable name="math-pi">
         <xsl:call-template name="begin-inline-math" />
         <xsl:text>\pi</xsl:text>
@@ -7448,9 +7446,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- prefix is optional -->
     <xsl:if test="@prefix">
-        <xsl:variable name="prefix">
-            <xsl:value-of select="@prefix" />
-        </xsl:variable>
+        <xsl:variable name="prefix" select="string(@prefix)"/>
         <xsl:variable name="short">
             <xsl:for-each select="document('pretext-units.xsl')">
                 <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
@@ -7459,9 +7455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$short" />
     </xsl:if>
     <!-- base unit is required -->
-    <xsl:variable name="base">
-        <xsl:value-of select="@base" />
-    </xsl:variable>
+    <xsl:variable name="base" select="string(@base)"/>
     <xsl:variable name="short">
         <xsl:for-each select="document('pretext-units.xsl')">
             <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
@@ -8046,9 +8040,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Presumes CSS headers have been loaded -->
 <xsl:template match="icon">
     <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="icon-name" select="string(@name)"/>
 
     <!-- for-each is just one node, but sets context for key() -->
     <xsl:variable name="fa-name">
@@ -8073,9 +8065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="kbd[@name]">
     <!-- the name attribute of the "kbd" in text as a string -->
-    <xsl:variable name="kbdkey-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="kbdkey-name" select="string(@name)"/>
     <!-- Entirely similar HTML/CSS, but will hold a Unicode character -->
     <kbd class="kbdkey">
         <!-- for-each is just one node, but sets context for key() -->
@@ -9494,9 +9484,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
-    <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
-    </xsl:variable>
+    <xsl:variable name="width-fraction" select="substring-before($width-percent,'%') div 100"/>
     <xsl:variable name="aspect-ratio">
         <xsl:apply-templates select="." mode="get-aspect-ratio">
             <xsl:with-param name="default-aspect" select="'1:1'" />
@@ -11289,9 +11277,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- First a variable to massage the author-supplied -->
 <!-- package list to the form MathJax expects        -->
-<xsl:variable name="latex-packages-mathjax">
-    <xsl:value-of select="str:replace($latex-packages, '\usepackage{', '\require{')" />
-</xsl:variable>
+<xsl:variable name="latex-packages-mathjax" select="str:replace($latex-packages, '\usepackage{', '\require{')"/>
 
 
 <!-- MathJax expects math wrapping, and we place in   -->

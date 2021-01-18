@@ -350,17 +350,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is set (temporarily) in docinfo, which will change           -->
 <!-- We do no special error-checking here since this will change       -->
 <!-- The variable will be empty if not set                             -->
-<xsl:variable name="numbering-exercises">
-    <xsl:value-of select="$docinfo/numbering/exercises/@level"/>
-</xsl:variable>
+<xsl:variable name="numbering-exercises" select="number($docinfo/numbering/exercises/@level)"/>
 
 <!-- Figure-Like can optionally run on their own numbering scheme      -->
 <!-- This is set (temporarily) in docinfo, which will change           -->
 <!-- We do no special error-checking here since this will change       -->
 <!-- The variable will be empty if not set                             -->
-<xsl:variable name="numbering-figures">
-    <xsl:value-of select="$docinfo/numbering/figures/@level"/>
-</xsl:variable>
+<xsl:variable name="numbering-figures" select="number($docinfo/numbering/figures/@level)"/>
 
 <!-- User-supplied Numbering for Equations    -->
 <!-- Respect switch, or provide sensible defaults -->
@@ -482,9 +478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- use this to distinguish one document from another.  -->
 <!-- The global variable here is empty to signal         -->
 <!-- "no choice" by the author.                          -->
-<xsl:variable name="document-id">
-    <xsl:value-of select="$docinfo/document-id"/>
-</xsl:variable>
+<xsl:variable name="document-id" select="string($docinfo/document-id)"/>
 
 <!-- The new version can return to the generic version  -->
 <!-- once we kill the dashed version for author use.    -->
@@ -3934,9 +3928,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="raw-title">
         <xsl:apply-templates select="." mode="title-simple"/>
     </xsl:variable>
-    <xsl:variable name="letter-only-title">
-        <xsl:value-of select="translate($raw-title, translate($raw-title, concat(&SIMPLECHAR;,' '), ''), '')" />
-    </xsl:variable>
+    <xsl:variable name="letter-only-title" select="translate($raw-title, translate($raw-title, concat(&SIMPLECHAR;,' '), ''), '')"/>
     <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>
 
@@ -4250,9 +4242,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
-    <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
-    </xsl:variable>
+    <xsl:variable name="width-fraction" select="substring-before($width-percent,'%') div 100"/>
     <xsl:value-of select="round($design-width-pixels * $width-fraction)" />
 </xsl:template>
 
@@ -4263,9 +4253,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
-    <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
-    </xsl:variable>
+    <xsl:variable name="width-fraction" select="substring-before($width-percent,'%') div 100"/>
     <xsl:variable name="aspect-ratio">
         <xsl:apply-templates select="." mode="get-aspect-ratio">
             <xsl:with-param name="default-aspect" select="$default-aspect" />
@@ -4500,9 +4488,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="icon">
     <!-- the name attribute of the "icon" in text as a string -->
-    <xsl:variable name="icon-name">
-        <xsl:value-of select="@name"/>
-    </xsl:variable>
+    <xsl:variable name="icon-name" select="string(@name)"/>
 
     <!-- for-each is just one node, but sets context for key() -->
     <xsl:for-each select="$icon-table">
@@ -8786,9 +8772,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- these, and so this template may never be hit         -->
 <!-- (or only rarely?)                                    -->
 <xsl:template match="xref[@provisional]">
-    <xsl:variable name="inline-warning">
-        <xsl:value-of select="@provisional" />
-    </xsl:variable>
+    <xsl:variable name="inline-warning" select="string(@provisional)"/>
     <xsl:variable name="margin-warning">
         <xsl:text>Provisional xref</xsl:text>
     </xsl:variable>
@@ -11229,15 +11213,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- [0-9]*\.?[0-9]*%          -->
 <xsl:template name="normalize-percentage">
     <xsl:param name="percentage" />
-    <xsl:variable name="stripped-percentage">
-        <xsl:value-of select="normalize-space($percentage)" />
-    </xsl:variable>
+    <xsl:variable name="stripped-percentage" select="normalize-space($percentage)"/>
     <xsl:if test="substring($stripped-percentage,string-length($stripped-percentage)) != '%'">
         <xsl:message terminate="yes">MBX:FATAL:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
     </xsl:if>
-    <xsl:variable name="percent">
-        <xsl:value-of select="normalize-space(substring($stripped-percentage,1,string-length($stripped-percentage) - 1))" />
-    </xsl:variable>
+    <xsl:variable name="percent" select="normalize-space(substring($stripped-percentage,1,string-length($stripped-percentage) - 1))"/>
     <xsl:if test="number($percent) != $percent">
         <xsl:message terminate="yes">MBX:FATAL:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
     </xsl:if>

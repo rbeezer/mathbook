@@ -71,9 +71,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Since we are describing HTML output, we want filenames   -->
 <!-- describing those files                                   -->
 <xsl:variable name="file-extension" select="'.html'"/>
-<xsl:variable name="chunk-level">
-    <xsl:value-of select="$chunk.level"/>
-</xsl:variable>
+<xsl:variable name="chunk-level" select="number($chunk.level)"/>
 
 <!-- Entry Template               -->
 <!-- Create outermost array       -->
