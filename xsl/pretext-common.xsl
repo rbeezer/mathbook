@@ -10236,6 +10236,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="xmlid-warning" />
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
+    <xsl:apply-templates select="." mode="image-description-warning" />
 </xsl:template>
 
 <!-- Literate Programming support is half-baked, 2017-07-21 -->
@@ -10381,6 +10382,29 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         </xsl:if>
     </xsl:for-each>
 </xsl:template>
+
+<!-- Image elements should have meaningful descriptions. -->
+<!-- We catch any "image" in source that does not carry  -->
+<!-- a description, or is empty.                         -->
+<xsl:template match="mathbook|pretext" mode="image-description-warning">
+    <xsl:variable name="descriptionless-images" select="$document-root//image[not(ancestor::webwork-reps)][not(description)]|$document-root//image[not(ancestor::webwork-reps)][normalize-space(description)='']" />
+    <xsl:if test="$descriptionless-images">
+        <xsl:message>
+            <xsl:text>PTX:WARNING: </xsl:text>
+            <xsl:text>There are images lacking a description(</xsl:text>
+            <xsl:value-of select="count($descriptionless-images)" />
+            <xsl:text> times).</xsl:text>
+        </xsl:message>
+    </xsl:if>
+    <xsl:for-each select="$descriptionless-images">
+        <xsl:message>
+            <xsl:text>PTX:WARNING: </xsl:text>
+            <xsl:text>An image element lacks a description child. Provide a description so that output formats can be optimally accessible.</xsl:text>
+        </xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:for-each>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Deprecations -->
