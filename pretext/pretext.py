@@ -1508,10 +1508,15 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     """
     import os
     import lxml.etree as ET
+    import subprocess
 
     _verbose('XSL conversion of {} by {}'.format(xml, xsl))
     debug_string = 'XSL conversion via {} of {} to {} and/or into directory {} with parameters {}'
     _debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
+
+    # add git describe to stringparams
+    if (get_ptx_git_path()):
+        stringparams['git.describe'] = subprocess.check_output(['git', '--git-dir=' + get_ptx_git_path(), 'describe']).strip()
 
     # string parameters arrive in a "plain" string:string dictionary
     # but the values need to be prepped for lxml use, always
@@ -1631,6 +1636,17 @@ def get_ptx_xsl_path():
     import os.path
 
     return os.path.join(get_ptx_path(), 'xsl')
+
+def get_ptx_git_path():
+    """Returns path of PreTeXt .git directory"""
+    import os.path
+    from os import path
+
+    ptx_git_path = os.path.join(get_ptx_path(), '.git')
+    if path.exists(ptx_git_path):
+        return ptx_git_path
+    else:
+        return None
 
 def get_source_path(source_file):
     """Returns path of source XML file"""

@@ -1171,6 +1171,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.datedfiles" select="'yes'" />
 <xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
 
+<xsl:param name="git.describe" select="''" />
+<xsl:variable name="b-git-describe" select="not($git.describe = '')" />
+
 <!-- This code is correct, interface is temporary and will be redone with no notice -->
 <xsl:param name="debug.chapter.start" select="''" />
 
@@ -11219,9 +11222,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:copy-of select="$lead-in" /><xsl:text>*       Generated from PreTeXt source      *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:if test="$b-debug-datedfiles">
     <xsl:copy-of select="$lead-in" /><xsl:text>*       on </xsl:text>  <xsl:value-of select="date:date-time()" />
-                                                                      <xsl:text>       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+                                                                         <xsl:text>       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:choose>
+    <!-- git describe provides information about where is the head of a PreTeXt repository -->
+    <!-- The pretext script might gather this and pass it as a parameter                   -->
+    <xsl:when test="$git.describe">
+    <xsl:copy-of select="$lead-in" /><xsl:text>*          mathbook git describe:          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*          </xsl:text>
+                                                          <xsl:value-of select="$git.describe"/>
+                         <xsl:value-of select="substring('                                ',string-length($git.describe) + 1)"/>
+                                                                                <xsl:text>*</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
     <xsl:copy-of select="$lead-in" /><xsl:text>*   A recent stable commit (2020-08-09):   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>* 98f21740783f166a773df4dc83cab5293ab63a4a *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
     </xsl:if>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*         https://pretextbook.org          *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
