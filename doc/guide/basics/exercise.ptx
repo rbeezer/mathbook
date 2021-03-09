@@ -1,26 +1,36 @@
 <exercise>
   <statement>
     <p>
-      The <c>statement</c> is mandatory.
+      <idx><h sortby="statement"><tag>statement</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
+      <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="statement"><tag>statement</tag></h></idx>
+      The <tag>statement</tag> is mandatory when any of
+      <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>
+      is included as a child of <tag>exercise</tag>,
+      otherwise it may be omitted.
     </p>
   </statement>
   <hint>
     <p>
+      <idx><h sortby="hint"><tag>hint</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
+      <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="hint"><tag>hint</tag></h></idx>
       Optional.
       Just an suggestion of what to try.
     </p>
   </hint>
   <answer>
     <p>
+      <idx><h sortby="answer"><tag>answer</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
+      <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="answer"><tag>answer</tag></h></idx>
       Optional.
       Just the <q>final answer</q>.
     </p>
   </answer>
   <solution>
     <p>
+      <idx><h sortby="solution"><tag>solution</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
+      <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="solution"><tag>solution</tag></h></idx>
       Optional.
       All the gory details.
     </p>
   </solution>
 </exercise>
-
