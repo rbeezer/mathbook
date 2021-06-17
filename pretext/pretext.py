@@ -1937,7 +1937,7 @@ def sanitize_alpha_num_underscore(param):
         raise ValueError('PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
 
-def set_config_info():
+def set_config_info(arg_supplied_config_file):
     """Create configuation in object for querying"""
     global _config
     import os.path # join()
@@ -1951,6 +1951,8 @@ def set_config_info():
     # Try to read old version, but prefer new version
     stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
+    if (arg_supplied_config_file):
+        config_file_list.append(arg_supplied_config_file)
     # ConfigParser module was renamed to configparser in Python 3
     # and object was renamed from SafeConfigParser() to ConfigParser()
     _config = configparser.ConfigParser()
@@ -1958,9 +1960,14 @@ def set_config_info():
     _verbose("parsing possible configuration files: {}".format(config_file_list))
     files_read = _config.read(config_file_list)
     _debug("configuration files actually used/read: {}".format(files_read))
+    if not(user_config_file in files_read) and not(arg_supplied_config_file in files_read):
+        _verbose("using default configuration only")
     if not(user_config_file in files_read):
-        msg = "using default configuration only, custom configuration file not used at {}"
+        msg = "custom configuration file not used at {}"
         _verbose(msg.format(user_config_file))
+    if arg_supplied_config_file and not(arg_supplied_config_file in files_read):
+        msg = "command-line specified config file not used at {}"
+        _verbose(msg.format(arg_supplied_config_file))
     return _config
 
 # def debug_config_info():
@@ -2130,6 +2137,7 @@ set_ptx_path()
 
 # Parse configuration file once
 _config = None
-set_config_info()
+# Moved to main()
+# set_config_info()
 
 _temps = []
