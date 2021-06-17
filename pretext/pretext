@@ -113,6 +113,11 @@ def get_cli_arguments():
                               "  -vv is some additional raw debugging information"])
     parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
 
+    config_help = '\n'.join(["filename for pretext script config file",
+                             "  Settings in the specified file will override both defaults in {}/pretext/pretext.cfg".format(ptx.get_ptx_path()),
+                             "  and user overrides in {}/user/pretext.cfg (if it exists)".format(ptx.get_ptx_path())])
+    parser.add_argument('-C', '--config', help=config_help, action="store", dest='config_file')
+
     component_info = [
         ('asy', 'Asymptote diagrams'),
         ('sageplot', 'Sage graphics'),
@@ -194,6 +199,9 @@ def main():
         ptx.set_verbosity(0)
     else:
         ptx.set_verbosity(args.verbose)
+
+    # Read config file(s)
+    ptx.set_config_info(args.config_file)
 
     # Now, and only now, we can report some setup,
     # since we had to wait for the vebosity to be reported and set
