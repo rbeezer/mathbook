@@ -385,7 +385,7 @@
         <xsl:with-param name="block-title">Scaffold</xsl:with-param>
         <xsl:with-param name="b-human-readable" select="$b-human-readable" />
     </xsl:call-template>
-    <xsl:text>Scaffold::Begin(numbered=>1);</xsl:text>
+    <xsl:text>Scaffold::Begin(is_open => "correct_or_first_incorrect", numbered => 1);</xsl:text>
     <xsl:if test="$b-human-readable">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
